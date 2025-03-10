@@ -9,14 +9,16 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
         </processorPath>
-        <module name="transaction-service" />
-        <module name="audit-logging-service" />
-        <module name="user-service" />
-        <module name="account-service" />
-        <module name="api-gateway-service" />
-        <module name="discovery-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="account-service" target="21" />
+      <module name="api-gateway-service" target="21" />
+      <module name="audit-logging-service" target="21" />
+      <module name="discovery-service" target="21" />
+      <module name="transaction-service" target="21" />
+      <module name="user-service" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
