@@ -1,0 +1,52 @@
+# Spring properties
+#spring:
+#  application:
+#    name: school-api-gateway
+
+server:
+  port: 8084 # Port for the microservice
+
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: api-gateway-service  # Give it a name
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true  # Auto-detect services in Eureka
+          lower-case-service-id: true  # Match service names correctly
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/user/**  # Route requests with /api/auth/* to AUTH service
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: authServiceCircuitBreaker
+                fallbackUri: forward:/fallback/auth
+
+
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.1.100:8761/eureka/ # URL of the Eureka server
+  instance:
+    prefer-ip-address: true # Use IP address instead of hostname
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "gateway, health, info, metrics"
+  endpoint:
+    gateway:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG

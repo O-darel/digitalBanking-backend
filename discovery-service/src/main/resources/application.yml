@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: eureka-server
+
+server:
+  port: 8761 # Default Eureka server port
+
+eureka:
+  instance:
+    hostname: 192.168.1.100
+  server:
+    enableSelfPreservation: false
+  client:
+    register-with-eureka: false # Eureka server does not register itself
+    fetch-registry: false # Eureka server does not fetch its own registry
+    # URL for Eureka server
