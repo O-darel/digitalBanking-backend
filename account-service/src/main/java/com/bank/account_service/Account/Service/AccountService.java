@@ -22,8 +22,6 @@ public class AccountService {
     private AccountRepository accountRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
-    @Autowired
     private KafkaTemplate<String, AccountEvent> kafkaTemplate;
 
     private static final String ACCOUNT_NUMBER_PREFIX = "127";

@@ -31,8 +31,6 @@ public class Account {
 
     private Double accountBalance;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private String CustomerId;
 
 }
