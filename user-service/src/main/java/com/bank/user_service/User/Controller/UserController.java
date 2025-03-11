@@ -4,17 +4,14 @@ package com.bank.user_service.User.Controller;
 import com.bank.user_service.User.Entity.User;
 import com.bank.user_service.User.Repository.UserRepository;
 import com.bank.user_service.User.Service.UserService;
-import com.bank.user_service.User.dtos.LoginDto;
-import com.bank.user_service.User.dtos.LoginResponseDto;
-import com.bank.user_service.User.dtos.SignUpDto;
-import com.bank.user_service.User.dtos.SignUpResponseDto;
+import com.bank.user_service.User.dtos.*;
 import com.bank.user_service.Util.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
@@ -106,6 +103,16 @@ public class UserController {
     public User getUserByEmail(@PathVariable String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    /**
+     * Get user details by UUID, including existence status.
+     * @param uuid The UUID of the user.
+     * @return ResponseEntity<UserResponseDTO>
+     */
+    @GetMapping("/{uuid}")
+    public ResponseEntity<UserResponseDto> getUserByUuid(@PathVariable String uuid) {
+        return ResponseEntity.ok(userService.getUserDetailsByUuid(uuid));
     }
 
 

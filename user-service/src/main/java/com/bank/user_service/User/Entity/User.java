@@ -7,14 +7,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Table(name = "Users")
@@ -27,6 +25,11 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private  Integer id;
+
+    //for external references
+    @Column(nullable = false,unique = true)
+    private String uuid;
+
 
     @Column(nullable = false)
     private String name;
@@ -52,6 +55,14 @@ public class User implements UserDetails {
     @UpdateTimestamp
     @Column(nullable = false)
     private Date updatedAt;
+
+
+    @PrePersist
+    public void generateUUID() {
+        if (uuid == null) {
+            uuid = UUID.randomUUID().toString();
+        }
+    }
 
 
     @Override

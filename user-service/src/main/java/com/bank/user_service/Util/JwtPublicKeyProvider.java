@@ -18,7 +18,7 @@ public class JwtPublicKeyProvider {
     private final PublicKey publicKey;
 
     public JwtPublicKeyProvider() throws Exception {
-        byte[] keyBytes = Files.readAllBytes(new ClassPathResource("school-public.pem").getFile().toPath());
+        byte[] keyBytes = Files.readAllBytes(new ClassPathResource("bank-public.pem").getFile().toPath());
         String publicKeyPEM = new String(keyBytes)
                 .replace("-----BEGIN PUBLIC KEY-----", "")
                 .replace("-----END PUBLIC KEY-----", "")

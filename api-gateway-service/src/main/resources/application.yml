@@ -50,3 +50,20 @@ management:
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    version: openapi_3_1
+    groups:
+      enabled: true
+    urls:
+      - name: Microservice-1
+        url: http://user-service/v3/api-docs
+#      - name: Microservice-2
+#        url: http://microservice-2/v3/api-docs
+#      - name: Microservice-3
+#        url: http://microservice-3/v3/api-docs
+

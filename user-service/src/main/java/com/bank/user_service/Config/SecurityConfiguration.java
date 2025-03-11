@@ -40,7 +40,7 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", //home page
-                                "/api/auth/**" //auth ie login and register
+                                "/api/users/**" //auth ie login and register
                                 //"/swagger-ui/**",  //swagger
                                 //"/swagger-ui.html", // Older Swagger UI URL
                                 //"/v3/api-docs/**"

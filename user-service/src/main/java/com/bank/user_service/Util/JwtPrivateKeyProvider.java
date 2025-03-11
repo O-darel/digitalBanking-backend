@@ -18,7 +18,7 @@ public class JwtPrivateKeyProvider {
     //private final PublicKey publicKey;
 
     public JwtPrivateKeyProvider() throws Exception {
-        byte[] keyBytes = Files.readAllBytes(new ClassPathResource("school-private.pem").getFile().toPath());
+        byte[] keyBytes = Files.readAllBytes(new ClassPathResource("bank-private.pem").getFile().toPath());
         String privateKeyPEM = new String(keyBytes)
                 .replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("-----END PRIVATE KEY-----", "")

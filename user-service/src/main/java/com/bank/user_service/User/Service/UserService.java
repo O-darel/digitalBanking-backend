@@ -6,13 +6,16 @@ import com.bank.user_service.User.Entity.User;
 import com.bank.user_service.User.Repository.UserRepository;
 import com.bank.user_service.User.dtos.LoginDto;
 import com.bank.user_service.User.dtos.SignUpDto;
+import com.bank.user_service.User.dtos.UserResponseDto;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
 
+@Service
 public class UserService {
 
     private final RoleRepository roleRepository;
@@ -117,5 +120,17 @@ public class UserService {
 
         return userRepository.findByEmail(loginDto.getEmail())
                 .orElseThrow();
+    }
+
+
+    public UserResponseDto getUserDetailsByUuid(String uuid) {
+        Optional<User> userOptional = userRepository.findByUuid(uuid);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return new UserResponseDto(true, user.getName(), user.getEmail());
+        } else {
+            return new UserResponseDto(false, null, null);
+        }
     }
 }
