@@ -1,8 +1,6 @@
 package com.bank.transaction_service.Transaction.Entity;
 
-package com.fintech.fintechmanagement.transaction;
 
-import com.fintech.fintechmanagement.account.Account;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -24,9 +22,10 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", nullable = false) // Foreign key stored in DB
-    private Account account;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "account_id", nullable = false) // Foreign key stored in DB
+
+    private Long account;
 
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;

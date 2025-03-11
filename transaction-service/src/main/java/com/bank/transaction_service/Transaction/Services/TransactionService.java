@@ -2,6 +2,7 @@ package com.bank.transaction_service.Transaction.Services;
 
 
 import com.bank.transaction_service.Transaction.Entity.Transaction;
+import com.bank.transaction_service.Transaction.Repositories.TransactionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TransactionService {
     private final TransactionRepository transactionRepository;
-    private final AccountRepository accountRepository;
+
 
     @Transactional
     public TransactionDTO recordTransaction(TransactionInputDto transactionDTO) {
