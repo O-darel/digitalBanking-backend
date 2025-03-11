@@ -51,7 +51,7 @@ public class UserService {
     }
 
     //Loan officer sign up
-    public User vetSignUp(SignUpDto signUpDto){
+    public User loanOfficerSignUp(SignUpDto signUpDto){
         Optional<Role> optionalRole = roleRepository.findByName("LOAN_OFFICER");
 
         if (optionalRole.isEmpty()) {
@@ -69,7 +69,7 @@ public class UserService {
     }
 
     //customer sign up
-    public User receptionistSignUp(SignUpDto signUpDto){
+    public User customerSignUp(SignUpDto signUpDto){
         Optional<Role> optionalRole = roleRepository.findByName("CUSTOMER");
 
         if (optionalRole.isEmpty()) {

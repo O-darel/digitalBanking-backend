@@ -1,8 +1,14 @@
 package com.bank.user_service.User.Controller;
 
 
+import com.bank.user_service.User.Entity.User;
 import com.bank.user_service.User.Repository.UserRepository;
 import com.bank.user_service.User.Service.UserService;
+import com.bank.user_service.User.dtos.LoginDto;
+import com.bank.user_service.User.dtos.LoginResponseDto;
+import com.bank.user_service.User.dtos.SignUpDto;
+import com.bank.user_service.User.dtos.SignUpResponseDto;
+import com.bank.user_service.Util.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -43,12 +49,12 @@ public class UserController {
 
 
 
-    //vet sign up route
-    @PostMapping("/register/vet")
+    //loan officer sign up route
+    @PostMapping("/register/loan-officer")
     @PreAuthorize("hasAuthority('CREATE_USERS')")
     public ResponseEntity<SignUpResponseDto> teacherSignUpRoute(SignUpDto signUpDto){
         //register user
-        User registeredUser= userService.vetSignUp(signUpDto);
+        User registeredUser= userService.loanOfficerSignUp(signUpDto);
 
         //response
         SignUpResponseDto signUpResponse=new SignUpResponseDto();
@@ -60,21 +66,6 @@ public class UserController {
     }
 
 
-    //receptionist sign up route
-    @PostMapping("/register/receptionist")
-    @PreAuthorize("hasAuthority('CREATE_USERS')")
-    public ResponseEntity<SignUpResponseDto> receptionistSignUpRoute(SignUpDto signUpDto){
-        //register user
-        User registeredUser= userService.receptionistSignUp(signUpDto);
-
-        //response
-        SignUpResponseDto signUpResponse=new SignUpResponseDto();
-        signUpResponse.setEmail(registeredUser.getEmail());
-        signUpResponse.setName(registeredUser.getName());
-        signUpResponse.setMessage("Successfully signed up");
-        //return response
-        return ResponseEntity.ok(signUpResponse);
-    }
 
     //customer sign up route
     @PostMapping("/register/customer")
