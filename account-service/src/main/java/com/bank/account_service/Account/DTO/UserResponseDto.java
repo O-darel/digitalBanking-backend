@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserResponseDto {
-    private boolean exists;
     private String email;
-    private String name;
+    private String uuid;
 }
