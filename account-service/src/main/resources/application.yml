@@ -22,8 +22,11 @@ spring:
     template:
       default-topic: "account-topic"
     producer:
+      properties:
+        spring.json.type.mapping: AccountEvent:package com.bank.account_service.Event.AccountEvent;
       key-serializer: "org.apache.kafka.common.serialization.StringSerializer"
       value-serializer: "org.apache.kafka.common.serialization.StringSerializer"
+
 
   servlet:
     multipart:
