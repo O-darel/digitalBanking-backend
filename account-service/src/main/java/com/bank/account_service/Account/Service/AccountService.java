@@ -6,9 +6,11 @@ import com.bank.account_service.Account.DTO.UpdateAccount;
 import com.bank.account_service.Account.Entity.Account;
 import com.bank.account_service.Account.Repository.AccountRepository;
 import com.bank.account_service.Customers.Entity.Customer;
+import com.bank.account_service.Event.AccountEvent;
 import com.bank.account_service.Customers.Repository.CustomerRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,8 @@ public class AccountService {
 
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private KafkaTemplate<String, AccountEvent> kafkaTemplate;
 
     private static final String ACCOUNT_NUMBER_PREFIX = "127";
     private static final int MAX_DIGITS = 3;
@@ -49,6 +53,7 @@ public class AccountService {
             account.setAccountType(input.getAccountType());
             account.setCustomer(customer);
             account.setAccountBalance(0.00);
+            kafkaTemplate.send("account-topic", new AccountEvent(account.getAccountNumber(), customer.getEmail()));
             accountRepository.save(account);
             return AccountResponse.builder()
                     .accountType(account.getAccountType())

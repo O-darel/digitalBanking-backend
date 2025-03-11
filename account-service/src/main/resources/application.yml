@@ -17,6 +17,14 @@ server:
 #        readTimeout: 5000
 
 spring:
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    template:
+      default-topic: "account-topic"
+    producer:
+      key-serializer: "org.apache.kafka.common.serialization.StringSerializer"
+      value-serializer: "org.apache.kafka.common.serialization.StringSerializer"
+
   servlet:
     multipart:
       max-file-size: 10MB
