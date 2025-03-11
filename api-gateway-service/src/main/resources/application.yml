@@ -26,7 +26,7 @@ spring:
             - name: CircuitBreaker
               args:
                 name: authServiceCircuitBreaker
-                fallbackUri: forward:/fallback/auth
+                fallbackUri: forward:/fallback/user
 
 
 

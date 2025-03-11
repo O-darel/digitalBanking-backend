@@ -7,7 +7,7 @@ server:
 
 eureka:
   instance:
-    hostname: 192.168.1.100
+    hostname: 172.16.8.151
   server:
     enableSelfPreservation: false
   client:
