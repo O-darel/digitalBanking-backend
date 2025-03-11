@@ -1,20 +1,20 @@
 server:
   port: 8083
 
-#eureka:
-#  eureka:
-#    instance:
-#      lease-renewal-interval-in-seconds: 10
-#  client:
-#  service-url:
-#      defaultZone: http://localhost:8761/eureka/
-#
-#feign:
-#  client:
-#    config:
-#      default:
-#        connectTimeout: 5000
-#        readTimeout: 5000
+eureka:
+  eureka:
+    instance:
+      lease-renewal-interval-in-seconds: 10
+  client:
+  service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
 
 spring:
   kafka:
@@ -23,7 +23,7 @@ spring:
       default-topic: "account-topic"
     producer:
       properties:
-        spring.json.type.mapping: AccountEvent:package com.bank.account_service.Event.AccountEvent;
+        spring.json.type.mapping: "AccountEvent:com.bank.account_service.Event.AccountEvent"
       key-serializer: "org.apache.kafka.common.serialization.StringSerializer"
       value-serializer: "org.apache.kafka.common.serialization.StringSerializer"
 
