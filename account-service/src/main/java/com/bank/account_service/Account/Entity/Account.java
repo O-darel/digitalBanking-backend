@@ -1,6 +1,5 @@
 package com.bank.account_service.Account.Entity;
 
-import com.bank.account_service.Customers.Entity.Customer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,8 +30,6 @@ public class Account {
 
     private Double accountBalance;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private String CustomerId;
 
 }

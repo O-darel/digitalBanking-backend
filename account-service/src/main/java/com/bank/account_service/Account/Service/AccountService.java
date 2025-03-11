@@ -3,11 +3,11 @@ package com.bank.account_service.Account.Service;
 import com.bank.account_service.Account.DTO.AccountResponse;
 import com.bank.account_service.Account.DTO.CreateAccount;
 import com.bank.account_service.Account.DTO.UpdateAccount;
+import com.bank.account_service.Account.DTO.UserResponseDto;
 import com.bank.account_service.Account.Entity.Account;
 import com.bank.account_service.Account.Repository.AccountRepository;
-import com.bank.account_service.Customers.Entity.Customer;
 import com.bank.account_service.Event.AccountEvent;
-import com.bank.account_service.Customers.Repository.CustomerRepository;
+import com.bank.account_service.Feign.UserInterface;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
-
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserInterface userInterface;
+
     @Autowired
     private KafkaTemplate<String, AccountEvent> kafkaTemplate;
 
@@ -46,14 +46,14 @@ public class AccountService {
 
     public AccountResponse createAccount(CreateAccount input){
         try {
-            Customer customer = customerRepository.findById(input.getCustomerId()).orElseThrow(()-> new RuntimeException("customer does not exist"));
+            UserResponseDto userResponseDto = userInterface.getUserByUuid();
             Account account = new Account();
             account.setAccountNumber(generateUniqueAccountNumber());
             account.setAccountStatus(input.getAccountStatus());
             account.setAccountType(input.getAccountType());
-            account.setCustomer(customer);
+            account.setCustomerId(userResponseDto.getUuid());
             account.setAccountBalance(0.00);
-            kafkaTemplate.send("account-topic", new AccountEvent(account.getAccountNumber(), customer.getEmail()));
+            kafkaTemplate.send("account-topic", new AccountEvent(account.getAccountNumber(), userResponseDto.getEmail()));
             accountRepository.save(account);
             return AccountResponse.builder()
                     .accountType(account.getAccountType())
