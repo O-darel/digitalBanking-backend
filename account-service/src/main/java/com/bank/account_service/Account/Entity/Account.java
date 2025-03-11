@@ -1,6 +1,5 @@
 package com.bank.account_service.Account.Entity;
 
-import com.bank.account_service.Customers.Entity.Customer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
