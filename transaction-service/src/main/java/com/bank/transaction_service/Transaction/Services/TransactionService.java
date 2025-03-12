@@ -1,7 +1,15 @@
 package com.bank.transaction_service.Transaction.Services;
 
 
+import com.bank.transaction_service.Transaction.Dtos.TransactionDto;
+import com.bank.transaction_service.Transaction.Dtos.TransactionEditDto;
+import com.bank.transaction_service.Transaction.Dtos.TransactionInputDto;
+import com.bank.transaction_service.Transaction.Dtos.UpdateAccountBalanceDto;
 import com.bank.transaction_service.Transaction.Entity.Transaction;
+import com.bank.transaction_service.Transaction.Entity.TransactionStatus;
+import com.bank.transaction_service.Transaction.Entity.TransactionType;
+import com.bank.transaction_service.Transaction.FeignClient.AccountClient;
+import com.bank.transaction_service.Transaction.FeignClient.Dtos.UserAccountDto;
 import com.bank.transaction_service.Transaction.Repositories.TransactionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,47 +25,54 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TransactionService {
     private final TransactionRepository transactionRepository;
+    private  final AccountClient accountClient;
 
 
     @Transactional
-    public TransactionDTO recordTransaction(TransactionInputDto transactionDTO) {
-        Account account = accountRepository.findById(transactionDTO.getAccountId())
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+    public TransactionDto recordTransaction(TransactionInputDto transactionInoutDto) {
+//        Account account = accountRepository.findById(transactionInoutDto.getAccountId())
+//                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+        UserAccountDto userAccountDto=accountClient.getAccountById(transactionInoutDto.getAccountId());
 
-        Transaction transaction = new Transaction();
-        transaction.setAccount(account);
-        transaction.setTransactionType(transactionDTO.getTransactionType());
-        transaction.setAmount(transactionDTO.getAmount());
-        transaction.setStatus(transactionDTO.getStatus());
-        transaction.setTransactionDate(LocalDateTime.now());
+        if(userAccountDto.getExists()){
 
-        // If transaction is approved, update account balance
-        if (transactionDTO.getStatus() == TransactionStatus.APPROVED) {
+            Transaction transaction = new Transaction();
+            transaction.setAccount(transactionInoutDto.getAccountId());
+            transaction.setTransactionType(transactionInoutDto.getTransactionType());
+            transaction.setAmount(transactionInoutDto.getAmount());
+            transaction.setStatus(transactionInoutDto.getStatus());
+            transaction.setTransactionDate(LocalDateTime.now());
 
-            UpdateAccountBalanceDto updateAccountBalanceDto=new UpdateAccountBalanceDto();
-            updateAccountBalanceDto.setAmount(transactionDTO.getAmount());
-            updateAccountBalanceDto.setTransactionType(transactionDTO.getTransactionType());
-            updateAccountBalance(account, updateAccountBalanceDto);
+            // If transaction is approved, update account balance
+            if (transactionInoutDto.getStatus() == TransactionStatus.APPROVED) {
+
+                UpdateAccountBalanceDto updateAccountBalanceDto=new UpdateAccountBalanceDto();
+                updateAccountBalanceDto.setAmount(transactionInoutDto.getAmount());
+                updateAccountBalanceDto.setTransactionType(transactionInoutDto.getTransactionType());
+                updateAccountBalance(account, updateAccountBalanceDto);
+            }
+
+            Transaction savedTransaction = transactionRepository.save(transaction);
+            return mapToDTO(savedTransaction);
+
         }
 
-        Transaction savedTransaction = transactionRepository.save(transaction);
-        return mapToDTO(savedTransaction);
     }
 
-    public List<TransactionDTO> getAllTransactions() {
+    public List<TransactionDto> getAllTransactions() {
         return transactionRepository.findAll().stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
-    public TransactionDTO getTransactionById(Long transactionId) {
+    public TransactionDto getTransactionById(Long transactionId) {
         Transaction transaction = transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
         return mapToDTO(transaction);
     }
 
     @Transactional
-    public TransactionDTO updateTransaction(Long transactionId, TransactionEditDto transactionDTO) {
+    public TransactionDto updateTransaction(Long transactionId, TransactionEditDto transactionDTO) {
         Transaction transaction = transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
 
@@ -118,8 +133,8 @@ public class TransactionService {
     }
 
 
-    private TransactionDTO mapToDTO(Transaction transaction) {
-        return new TransactionDTO(
+    private TransactionDto mapToDTO(Transaction transaction) {
+        return new TransactionDto(
                 transaction.getId(),
                 transaction.getAccount().getId(),
                 transaction.getTransactionType(),

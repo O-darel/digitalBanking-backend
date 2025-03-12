@@ -7,13 +7,17 @@ import com.bank.user_service.User.Repository.UserRepository;
 import com.bank.user_service.User.dtos.LoginDto;
 import com.bank.user_service.User.dtos.SignUpDto;
 import com.bank.user_service.User.dtos.UserResponseDto;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -123,14 +127,68 @@ public class UserService {
     }
 
 
-    public UserResponseDto getUserDetailsByUuid(String uuid) {
-        Optional<User> userOptional = userRepository.findByUuid(uuid);
+//    public UserResponseDto getUserDetailsByUuid(String uuid) {
+//        Optional<User> userOptional = userRepository.findByUuid(uuid);
+//
+//        if (userOptional.isPresent()) {
+//            User user = userOptional.get();
+//            return new UserResponseDto(true, user.getName(), user.getEmail());
+//        } else {
+//            return new UserResponseDto(false, null, null);
+//        }
+//    }
 
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            return new UserResponseDto(true, user.getName(), user.getEmail());
-        } else {
-            return new UserResponseDto(false, null, null);
+    public UserResponseDto getUserDetails() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+
+            // Assuming the username is the email (this depends on your auth setup)
+            String email = userDetails.getUsername();
+
+            // If you store the UUID in JWT claims, you can extract it like this
+//            String uuid = userDetails instanceof CustomUserDetails
+//                    ? ((CustomUserDetails) userDetails).getUuid()
+//                    : "Unknown";
+            Optional<User> user=userRepository.findByEmail(email);
+            if(user.isPresent()){
+                String uuid = user.get().getUuid();
+                UserResponseDto userResponseDto=new UserResponseDto();
+                userResponseDto.setEmail(user.get().getEmail());
+                userResponseDto.setUuid(user.get().getUuid());
+
+                return userResponseDto;
+            }
+
+            throw new UsernameNotFoundException("User email does not exist: " + email);
+
         }
+        throw new AccessDeniedException("User is not authenticated");
+    }
+
+
+
+    public List<UserResponseDto> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        userRepository.findAll().forEach(users::add);
+
+        return users.stream().map(user -> {
+            UserResponseDto dto = new UserResponseDto();
+            dto.setUuid(user.getUuid());
+            dto.setEmail(user.getEmail());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    public UserResponseDto getUserById(Integer id) {
+        User user = userRepository.findById(id)
+                .orElseThrow();
+//        Optional<User> user=userRepository.findById(id);
+
+        UserResponseDto dto = new UserResponseDto();
+        dto.setUuid(user.getUuid());
+        dto.setEmail(user.getEmail());
+        return dto;
     }
 }

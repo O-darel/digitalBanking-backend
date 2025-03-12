@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -107,12 +109,22 @@ public class UserController {
 
     /**
      * Get user details by UUID, including existence status.
-     * @param uuid The UUID of the user.
+     *
      * @return ResponseEntity<UserResponseDTO>
      */
-    @GetMapping("/{uuid}")
-    public ResponseEntity<UserResponseDto> getUserByUuid(@PathVariable String uuid) {
-        return ResponseEntity.ok(userService.getUserDetailsByUuid(uuid));
+    @GetMapping("/get-user")
+    public ResponseEntity<UserResponseDto> getUserByUuid() {
+        return ResponseEntity.ok(userService.getUserDetails());
+    }
+
+    @GetMapping
+    public List<UserResponseDto> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public UserResponseDto getUserById(@PathVariable Integer id) {
+        return userService.getUserById(id);
     }
 
 
