@@ -1,10 +1,13 @@
 package com.bank.transaction_service.Transaction.FeignClient;
 
+import com.bank.transaction_service.Transaction.Dtos.UpdateAccountBalanceDto;
+import com.bank.transaction_service.Transaction.FeignClient.Dtos.AccountUpdateDto;
 import com.bank.transaction_service.Transaction.FeignClient.Dtos.UserAccountDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @FeignClient(name = "account-service")
@@ -14,4 +17,5 @@ public interface AccountClient {
     UserAccountDto getAccountById(Long Id);
 
     @PutMapping("api/accounts/update-balance")
+    String updateAccountBalance(@RequestBody UpdateAccountBalanceDto updateAccountBalanceDto);
 }

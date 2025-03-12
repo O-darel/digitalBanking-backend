@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateAccountBalanceDto {
+    private Long accountId;
     private TransactionType transactionType;
-    private BigDecimal amount;
+    private Double amount;
 }
 

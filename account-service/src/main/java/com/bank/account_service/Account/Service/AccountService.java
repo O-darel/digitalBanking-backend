@@ -137,10 +137,10 @@ public class AccountService {
         Double newBalance = account.getAccountBalance() + accountUpdateDto.getAmount();
         // Update balance
         account.setAccountBalance(newBalance);
+
+        //log this transaction to mongo
         return accountRepository.save(account);
     }
-
-
 
 
 }

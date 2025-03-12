@@ -19,7 +19,7 @@ public class TransactionDto {
     private Long id;
     private Long accountId;
     private TransactionType transactionType;
-    private BigDecimal amount;
+    private Double amount;
     private TransactionStatus status;
     private LocalDateTime transactionDate;
 }

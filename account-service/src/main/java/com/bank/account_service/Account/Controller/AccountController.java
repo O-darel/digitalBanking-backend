@@ -1,6 +1,7 @@
 package com.bank.account_service.Account.Controller;
 
 import com.bank.account_service.Account.DTO.AccountResponse;
+import com.bank.account_service.Account.DTO.AccountUpdateDto;
 import com.bank.account_service.Account.DTO.CreateAccount;
 import com.bank.account_service.Account.DTO.UpdateAccount;
 import com.bank.account_service.Account.Entity.Account;
@@ -71,5 +72,11 @@ public class AccountController {
         }
     }
 
-    public ResponseEntity<>
+    @PutMapping("/update/account-balance")
+    public ResponseEntity<String> updateAccountBalance(@RequestBody AccountUpdateDto accountUpdateDto){
+         Account account= accountService.updateAccountBalance(accountUpdateDto);
+         String message="Account updated successfully ";
+
+         return ResponseEntity.ok(message);
+    }
 }

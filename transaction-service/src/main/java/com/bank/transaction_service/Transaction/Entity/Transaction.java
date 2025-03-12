@@ -31,7 +31,7 @@ public class Transaction {
     private TransactionType transactionType;
 
     @Positive
-    private BigDecimal amount;
+    private Double amount;
 
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;

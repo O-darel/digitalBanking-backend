@@ -48,15 +48,18 @@ public class TransactionService {
 
                 UpdateAccountBalanceDto updateAccountBalanceDto=new UpdateAccountBalanceDto();
                 updateAccountBalanceDto.setAmount(transactionInoutDto.getAmount());
+                updateAccountBalanceDto.setAccountId(transactionInoutDto.getAccountId());
                 updateAccountBalanceDto.setTransactionType(transactionInoutDto.getTransactionType());
-                updateAccountBalance(account, updateAccountBalanceDto);
+
+                accountClient.updateAccountBalance(updateAccountBalanceDto);
             }
 
             Transaction savedTransaction = transactionRepository.save(transaction);
             return mapToDTO(savedTransaction);
 
         }
-
+        // Return null or throw an exception if account does not exist
+        throw new EntityNotFoundException("Account does not exist.");
     }
 
     public List<TransactionDto> getAllTransactions() {
@@ -87,45 +90,44 @@ public class TransactionService {
             UpdateAccountBalanceDto updateAccountBalanceDto=new UpdateAccountBalanceDto();
             updateAccountBalanceDto.setTransactionType(transaction.getTransactionType());
             updateAccountBalanceDto.setAmount(transaction.getAmount());
-            updateAccountBalance(transaction.getAccount(), updateAccountBalanceDto);
+            updateAccountBalanceDto.setAccountId(transaction.getAccount());
+
+            accountClient.updateAccountBalance(updateAccountBalanceDto);
         }
 
         Transaction updatedTransaction = transactionRepository.save(transaction);
         return mapToDTO(updatedTransaction);
     }
 
-    @Transactional
-    public void deleteTransaction(Long transactionId) {
-        Transaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
 
-        if (transaction.getStatus() == TransactionStatus.APPROVED) {
-            reverseAccountBalance(transaction);
-        }
-
-        transactionRepository.delete(transaction);
-    }
-
-//    private void updateAccountBalance(Account account,UpdateAccountBalanceDto updateAccountBalanceDto) {
-//        BigDecimal amount = updateAccountBalanceDto.getAmount();
+//    @Transactional
+//    public void deleteTransaction(Long transactionId) {
+//        Transaction transaction = transactionRepository.findById(transactionId)
+//                .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
 //
-//        if (updateAccountBalanceDto.getTransactionType() == TransactionType.DEPOSIT) {
-//            account.setBalance(account.getBalance().add(amount)); // Use add() for deposit
-//        } else if (updateAccountBalanceDto.getTransactionType() == TransactionType.WITHDRAWAL) {
-//            if (account.getBalance().compareTo(amount) < 0) { // Compare instead of <
-//                throw new IllegalArgumentException("Insufficient balance");
-//            }
-//            account.setBalance(account.getBalance().subtract(amount)); // Use subtract() for withdrawal
+//        if (transaction.getStatus() == TransactionStatus.APPROVED) {
+//            reverseAccountBalance(transaction);
 //        }
-//        accountRepository.save(account);
-//    }
 //
+//        transactionRepository.delete(transaction);
+//    }
+
 //    private void reverseAccountBalance(Transaction transaction) {
 //        Account account = transaction.getAccount();
 //        BigDecimal amount = transaction.getAmount();
 //
 //        if (transaction.getTransactionType() == TransactionType.DEPOSIT) {
-//            account.setBalance(account.getBalance().subtract(amount)); // Reverse deposit
+//
+//            account.setBalance(account.getBalance().subtract(amount));
+//            // Reverse deposit
+////            UpdateAccountBalanceDto updateAccountBalanceDto=new UpdateAccountBalanceDto();
+////
+////            updateAccountBalanceDto.setTransactionType(transaction.getTransactionType());
+////            updateAccountBalanceDto.setAmount(transaction.getAmount());
+////            updateAccountBalanceDto.setAccountId(transaction.getAccount());
+//
+//            accountClient.updateAccountBalance(updateAccountBalanceDto);
+//
 //        } else if (transaction.getTransactionType() == TransactionType.WITHDRAWAL) {
 //            account.setBalance(account.getBalance().add(amount)); // Reverse withdrawal
 //        }
@@ -136,7 +138,7 @@ public class TransactionService {
     private TransactionDto mapToDTO(Transaction transaction) {
         return new TransactionDto(
                 transaction.getId(),
-                transaction.getAccount().getId(),
+                transaction.getAccount(),
                 transaction.getTransactionType(),
                 transaction.getAmount(),
                 transaction.getStatus(),
