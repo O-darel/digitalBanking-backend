@@ -106,31 +106,31 @@ public class TransactionService {
         transactionRepository.delete(transaction);
     }
 
-    private void updateAccountBalance(Account account,UpdateAccountBalanceDto updateAccountBalanceDto) {
-        BigDecimal amount = updateAccountBalanceDto.getAmount();
-
-        if (updateAccountBalanceDto.getTransactionType() == TransactionType.DEPOSIT) {
-            account.setBalance(account.getBalance().add(amount)); // Use add() for deposit
-        } else if (updateAccountBalanceDto.getTransactionType() == TransactionType.WITHDRAWAL) {
-            if (account.getBalance().compareTo(amount) < 0) { // Compare instead of <
-                throw new IllegalArgumentException("Insufficient balance");
-            }
-            account.setBalance(account.getBalance().subtract(amount)); // Use subtract() for withdrawal
-        }
-        accountRepository.save(account);
-    }
-
-    private void reverseAccountBalance(Transaction transaction) {
-        Account account = transaction.getAccount();
-        BigDecimal amount = transaction.getAmount();
-
-        if (transaction.getTransactionType() == TransactionType.DEPOSIT) {
-            account.setBalance(account.getBalance().subtract(amount)); // Reverse deposit
-        } else if (transaction.getTransactionType() == TransactionType.WITHDRAWAL) {
-            account.setBalance(account.getBalance().add(amount)); // Reverse withdrawal
-        }
-        accountRepository.save(account);
-    }
+//    private void updateAccountBalance(Account account,UpdateAccountBalanceDto updateAccountBalanceDto) {
+//        BigDecimal amount = updateAccountBalanceDto.getAmount();
+//
+//        if (updateAccountBalanceDto.getTransactionType() == TransactionType.DEPOSIT) {
+//            account.setBalance(account.getBalance().add(amount)); // Use add() for deposit
+//        } else if (updateAccountBalanceDto.getTransactionType() == TransactionType.WITHDRAWAL) {
+//            if (account.getBalance().compareTo(amount) < 0) { // Compare instead of <
+//                throw new IllegalArgumentException("Insufficient balance");
+//            }
+//            account.setBalance(account.getBalance().subtract(amount)); // Use subtract() for withdrawal
+//        }
+//        accountRepository.save(account);
+//    }
+//
+//    private void reverseAccountBalance(Transaction transaction) {
+//        Account account = transaction.getAccount();
+//        BigDecimal amount = transaction.getAmount();
+//
+//        if (transaction.getTransactionType() == TransactionType.DEPOSIT) {
+//            account.setBalance(account.getBalance().subtract(amount)); // Reverse deposit
+//        } else if (transaction.getTransactionType() == TransactionType.WITHDRAWAL) {
+//            account.setBalance(account.getBalance().add(amount)); // Reverse withdrawal
+//        }
+//        accountRepository.save(account);
+//    }
 
 
     private TransactionDto mapToDTO(Transaction transaction) {

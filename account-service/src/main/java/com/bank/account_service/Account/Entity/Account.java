@@ -16,6 +16,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountId;
+
     @Column(unique = true)
     private String accountNumber;
 

@@ -1,9 +1,6 @@
 package com.bank.account_service.Account.Service;
 
-import com.bank.account_service.Account.DTO.AccountResponse;
-import com.bank.account_service.Account.DTO.CreateAccount;
-import com.bank.account_service.Account.DTO.UpdateAccount;
-import com.bank.account_service.Account.DTO.UserResponseDto;
+import com.bank.account_service.Account.DTO.*;
 import com.bank.account_service.Account.Entity.Account;
 import com.bank.account_service.Account.Repository.AccountRepository;
 import com.bank.account_service.Event.AccountEvent;
@@ -113,4 +110,37 @@ public class AccountService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    //update account balance
+//    public Account updateAccountBalance(AccountUpdateDto accountUpdateDto){
+//        try{
+//            //get account
+//            Account account= accountRepository.findById(accountUpdateDto.getAccountId()).orElseThrow();
+//            Double newBalance =account.getAccountBalance() + account.getAccountBalance();
+//
+//            //update balance
+//            account.setAccountBalance(newBalance);
+//            return  accountRepository.save(account);
+//        } catch (RuntimeException e){
+//            throw  new RuntimeException(e.getMessage());
+//        }
+//
+//    }
+
+
+    public Account updateAccountBalance(AccountUpdateDto accountUpdateDto) {
+        // Get account
+        Account account = accountRepository.findById(accountUpdateDto.getAccountId())
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
+        // Calculate new balance correctly
+        Double newBalance = account.getAccountBalance() + accountUpdateDto.getAmount();
+        // Update balance
+        account.setAccountBalance(newBalance);
+        return accountRepository.save(account);
+    }
+
+
+
+
 }
