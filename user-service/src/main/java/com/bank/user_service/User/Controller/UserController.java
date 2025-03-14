@@ -101,7 +101,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/users/email/{email}")
+    @GetMapping("/email/{email}")
     public User getUserByEmail(@PathVariable String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -127,6 +127,16 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+
+    @PostMapping("/validate")
+    public ResponseEntity<UserDetailsDto> validateToken(@RequestBody String token) {
+        try {
+            UserDetailsDto userDetails = userService.validateToken(token);
+            return ResponseEntity.ok(userDetails);
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body(null);
+        }
+    }
 
 }
 

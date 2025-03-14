@@ -1,4 +1,4 @@
-package com.bank.transaction_service.Transaction.FeignClient.Dtos;
+package com.bank.transaction_service.transaction.FeignClient.Dtos;
 
 
 import lombok.*;

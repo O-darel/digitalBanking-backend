@@ -1,7 +1,7 @@
-package com.bank.transaction_service.Transaction.Dtos;
+package com.bank.transaction_service.transaction.Dtos;
 
 
-import com.bank.transaction_service.Transaction.Entity.TransactionStatus;
+import com.bank.transaction_service.transaction.Entity.TransactionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

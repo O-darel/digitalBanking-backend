@@ -1,4 +1,4 @@
-package com.bank.transaction_service.Transaction.Entity;
+package com.bank.transaction_service.transaction.Entity;
 
 
 import jakarta.persistence.*;
@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.naming.Name;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity

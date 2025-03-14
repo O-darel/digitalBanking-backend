@@ -72,9 +72,17 @@ public class JwtService {
         return jwtExpiration;
     }
 
+//    public String generateToken(UserDetails userDetails) {
+//
+//        return generateToken(new HashMap<>(), userDetails);
+//    }
+
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("roles", userDetails.getAuthorities());
+        return buildToken(extraClaims, userDetails, jwtExpiration);
     }
+
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return buildToken(extraClaims, userDetails, jwtExpiration);

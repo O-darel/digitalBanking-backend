@@ -1,22 +1,20 @@
-package com.bank.transaction_service.Transaction.Services;
+package com.bank.transaction_service.transaction.Services;
 
 
-import com.bank.transaction_service.Transaction.Dtos.TransactionDto;
-import com.bank.transaction_service.Transaction.Dtos.TransactionEditDto;
-import com.bank.transaction_service.Transaction.Dtos.TransactionInputDto;
-import com.bank.transaction_service.Transaction.Dtos.UpdateAccountBalanceDto;
-import com.bank.transaction_service.Transaction.Entity.Transaction;
-import com.bank.transaction_service.Transaction.Entity.TransactionStatus;
-import com.bank.transaction_service.Transaction.Entity.TransactionType;
-import com.bank.transaction_service.Transaction.FeignClient.AccountClient;
-import com.bank.transaction_service.Transaction.FeignClient.Dtos.UserAccountDto;
-import com.bank.transaction_service.Transaction.Repositories.TransactionRepository;
+import com.bank.transaction_service.transaction.Dtos.TransactionDto;
+import com.bank.transaction_service.transaction.Dtos.TransactionEditDto;
+import com.bank.transaction_service.transaction.Dtos.TransactionInputDto;
+import com.bank.transaction_service.transaction.Dtos.UpdateAccountBalanceDto;
+import com.bank.transaction_service.transaction.Entity.Transaction;
+import com.bank.transaction_service.transaction.Entity.TransactionStatus;
+import com.bank.transaction_service.transaction.FeignClient.AccountClient;
+import com.bank.transaction_service.transaction.FeignClient.Dtos.UserAccountDto;
+import com.bank.transaction_service.transaction.Repositories.TransactionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;

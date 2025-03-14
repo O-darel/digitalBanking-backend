@@ -1,4 +1,4 @@
-package com.bank.transaction_service.Transaction.FeignClient;
+package com.bank.transaction_service.transaction.FeignClient;
 
 
 import feign.RequestInterceptor;

@@ -1,4 +1,4 @@
-package com.bank.transaction_service.Transaction.Entity;
+package com.bank.transaction_service.transaction.Entity;
 
 
 public enum TransactionType {

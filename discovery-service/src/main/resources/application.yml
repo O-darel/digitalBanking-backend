@@ -7,7 +7,10 @@ server:
 
 eureka:
   instance:
-    hostname: 172.16.8.151
+    #hostname: 172.16.8.151
+    hostname: localhost
+
+
   server:
     enableSelfPreservation: false
   client:

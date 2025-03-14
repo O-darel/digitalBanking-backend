@@ -30,15 +30,16 @@ spring:
 
 
 
-
 eureka:
   client:
     service-url:
-      defaultZone: http://172.16.8.151:8761/eureka/ # URL of the Eureka server
+      #defaultZone: http://172.16.8.151:8761/eureka/ # URL of the Eureka server
+      defaultZone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true # Use IP address instead of hostname
 
 management:
+
   endpoints:
     web:
       exposure:
@@ -60,10 +61,10 @@ springdoc:
     groups:
       enabled: true
     urls:
-      - name: Microservice-1
+      - name: USER-SERVICE
         url: http://user-service/v3/api-docs
-#      - name: Microservice-2
-#        url: http://microservice-2/v3/api-docs
+      - name: TRANSACTION-SERVICE
+        url: http://transaction-service/v3/api-docs
 #      - name: Microservice-3
 #        url: http://microservice-3/v3/api-docs
 

@@ -1,11 +1,9 @@
-package com.bank.transaction_service.Transaction.FeignClient;
+package com.bank.transaction_service.transaction.FeignClient;
 
-import com.bank.transaction_service.Transaction.Dtos.UpdateAccountBalanceDto;
-import com.bank.transaction_service.Transaction.FeignClient.Dtos.AccountUpdateDto;
-import com.bank.transaction_service.Transaction.FeignClient.Dtos.UserAccountDto;
+import com.bank.transaction_service.transaction.Dtos.UpdateAccountBalanceDto;
+import com.bank.transaction_service.transaction.FeignClient.Dtos.UserAccountDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 

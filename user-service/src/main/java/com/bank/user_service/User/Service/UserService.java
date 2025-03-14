@@ -6,12 +6,16 @@ import com.bank.user_service.User.Entity.User;
 import com.bank.user_service.User.Repository.UserRepository;
 import com.bank.user_service.User.dtos.LoginDto;
 import com.bank.user_service.User.dtos.SignUpDto;
+import com.bank.user_service.User.dtos.UserDetailsDto;
 import com.bank.user_service.User.dtos.UserResponseDto;
+import com.bank.user_service.Util.JwtService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,17 +30,23 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
 
     public UserService(
             RoleRepository roleRepository,
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            AuthenticationManager authenticationManager
+            AuthenticationManager authenticationManager,
+            JwtService jwtService,
+            UserDetailsService userDetailsService
     ){
         this.roleRepository=roleRepository;
         this.userRepository=userRepository;
         this.passwordEncoder=passwordEncoder;
         this.authenticationManager=authenticationManager;
+        this.jwtService=jwtService;
+        this.userDetailsService=userDetailsService;
     }
 
     //admin sign up service
@@ -190,5 +200,22 @@ public class UserService {
         dto.setUuid(user.getUuid());
         dto.setEmail(user.getEmail());
         return dto;
+    }
+
+
+    public UserDetailsDto validateToken(String token){
+        String username = jwtService.extractUsername(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        if (!jwtService.isTokenValid(token, userDetails)) {
+            throw new RuntimeException("Invalid or expired token");
+        }
+
+        List<String> roles = userDetails.getAuthorities()
+                .stream()
+                .map(auth -> auth.getAuthority())
+                .collect(Collectors.toList());
+
+        return new UserDetailsDto(username, roles);
     }
 }

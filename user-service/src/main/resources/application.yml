@@ -2,7 +2,8 @@
 eureka:
   client:
     service-url:
-      defaultZone: http://172.16.8.151:8761/eureka/ # URL of the Eureka server
+      #defaultZone: http://172.16.8.151:8761/eureka/ # URL of the Eureka server
+      defaultZone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
 
