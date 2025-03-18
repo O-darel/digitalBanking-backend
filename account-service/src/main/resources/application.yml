@@ -25,7 +25,7 @@ spring:
       properties:
         spring.json.type.mapping: "AccountEvent:com.bank.account_service.Event.AccountEvent"
       key-serializer: "org.apache.kafka.common.serialization.StringSerializer"
-      value-serializer: "org.apache.kafka.common.serialization.StringSerializer"
+      value-serializer: "com.bank.account_service.Serializer.MultiEventSerializer"
 
 
   servlet:
@@ -47,3 +47,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+logging:
+  level:
+    org.apache.kafka: DEBUG
+    org.springframework.kafka: DEBUG

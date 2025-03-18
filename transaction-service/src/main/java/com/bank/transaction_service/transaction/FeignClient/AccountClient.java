@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "account-service")
 public interface AccountClient {
 
-    @GetMapping("api/accounts/{id}")
-    UserAccountDto getAccountById(Long Id);
+    @GetMapping("api/accounts/{accountId}")
+    UserAccountDto getAccountById(Long accountId);
 
     @PutMapping("api/accounts/update-balance")
     String updateAccountBalance(@RequestBody UpdateAccountBalanceDto updateAccountBalanceDto);

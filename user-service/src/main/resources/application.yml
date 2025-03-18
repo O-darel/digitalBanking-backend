@@ -2,8 +2,12 @@
 eureka:
   client:
     service-url:
+<<<<<<< Updated upstream
       #defaultZone: http://172.16.8.151:8761/eureka/ # URL of the Eureka server
       defaultZone: http://localhost:8761/eureka/
+=======
+      defaultZone: http://localhost:8761/eureka/ # URL of the Eureka server
+>>>>>>> Stashed changes
   instance:
     prefer-ip-address: true
 

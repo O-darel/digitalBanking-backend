@@ -21,20 +21,55 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/api/user/**  # Route requests with /api/auth/* to AUTH service
+            - Path=/api/user/**
           filters:
             - name: CircuitBreaker
               args:
                 name: authServiceCircuitBreaker
                 fallbackUri: forward:/fallback/user
 
+        - id: account-service
+          uri: lb://ACCOUNT-SERVICE
+          predicates:
+            - Path=/api/accounts/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: accountServiceCircuitBreaker
+                fallbackUri: forward:/fallback/account
 
+        - id: audit-service
+          uri: lb://AUDIT-SERVICE
+          predicates:
+            - Path=/api/audit_logs/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: auditLogsServiceCircuitBreaker
+                fallbackUri: forward:/fallback/audit
 
+<<<<<<< Updated upstream
 eureka:
   client:
     service-url:
       #defaultZone: http://172.16.8.151:8761/eureka/ # URL of the Eureka server
       defaultZone: http://localhost:8761/eureka/
+=======
+        - id: transaction-service
+          uri: lb://TRANSACTION-SERVICE
+          predicates:
+            - Path=/api/transactions/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: authServiceCircuitBreaker
+                fallbackUri: forward:/fallback/transaction
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/ # URL of the Eureka server
+>>>>>>> Stashed changes
   instance:
     prefer-ip-address: true # Use IP address instead of hostname
 

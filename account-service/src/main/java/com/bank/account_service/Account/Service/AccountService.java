@@ -4,10 +4,13 @@ import com.bank.account_service.Account.DTO.*;
 import com.bank.account_service.Account.Entity.Account;
 import com.bank.account_service.Account.Repository.AccountRepository;
 import com.bank.account_service.Event.AccountEvent;
+import com.bank.account_service.Event.AuditAccountEvent;
 import com.bank.account_service.Feign.UserInterface;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +26,9 @@ public class AccountService {
     @Autowired
     private KafkaTemplate<String, AccountEvent> kafkaTemplate;
 
+    @Autowired
+    private KafkaTemplate<String, AuditAccountEvent> kafkaTemplateAudit;
+    private String sourceService = "Account";
     private static final String ACCOUNT_NUMBER_PREFIX = "127";
     private static final int MAX_DIGITS = 3;
     @Transactional
@@ -39,9 +45,20 @@ public class AccountService {
 
         return ACCOUNT_NUMBER_PREFIX + String.format("%03d", newNumber);
     }
+    //obtain current security context
+    private String getCurrentUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() != null) {
+            return authentication.getName();
+        }
+        return "anonymous";
+    }
+
 
 
     public AccountResponse createAccount(CreateAccount input){
+        String Details = "account created";
+        String eventType = "POST";
         try {
             UserResponseDto userResponseDto = userInterface.getUserByUuid();
             Account account = new Account();
@@ -51,6 +68,7 @@ public class AccountService {
             account.setCustomerId(userResponseDto.getUuid());
             account.setAccountBalance(0.00);
             kafkaTemplate.send("account-topic", new AccountEvent(account.getAccountNumber(), userResponseDto.getEmail()));
+            kafkaTemplateAudit.send("account-events", new AuditAccountEvent(Details, eventType, sourceService, getCurrentUserEmail()));
             accountRepository.save(account);
             return AccountResponse.builder()
                     .accountType(account.getAccountType())
@@ -91,10 +109,13 @@ public class AccountService {
         }
     }
     public Account updateAccount(UpdateAccount input, Long accountId){
+        String Details = "account updated";
+        String eventType = "UPDATE";
         try{
             Account account = accountRepository.findById(accountId).orElseThrow(()-> new RuntimeException("account does not exist"));
             account.setAccountStatus(input.getAccountStatus());
             account.setAccountType(input.getAccountType());
+            kafkaTemplateAudit.send("account-events", new AuditAccountEvent(Details, eventType, sourceService, getCurrentUserEmail()));
             accountRepository.save(account);
             return account;
         } catch (RuntimeException e) {
@@ -102,9 +123,12 @@ public class AccountService {
         }
     }
     public String deleteAccount(Long accountId){
+        String Details = "account delete";
+        String eventType = "DELETE";
         try {
             Account account = accountRepository.findById(accountId).orElseThrow();
             accountRepository.delete(account);
+            kafkaTemplateAudit.send("account-events", new AuditAccountEvent(Details, eventType, sourceService, getCurrentUserEmail()));
             return "account deleted successfully";
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getMessage());

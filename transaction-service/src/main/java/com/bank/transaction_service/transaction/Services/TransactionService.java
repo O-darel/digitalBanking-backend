@@ -1,6 +1,7 @@
 package com.bank.transaction_service.transaction.Services;
 
 
+<<<<<<< Updated upstream:transaction-service/src/main/java/com/bank/transaction_service/transaction/Services/TransactionService.java
 import com.bank.transaction_service.transaction.Dtos.TransactionDto;
 import com.bank.transaction_service.transaction.Dtos.TransactionEditDto;
 import com.bank.transaction_service.transaction.Dtos.TransactionInputDto;
@@ -10,8 +11,23 @@ import com.bank.transaction_service.transaction.Entity.TransactionStatus;
 import com.bank.transaction_service.transaction.FeignClient.AccountClient;
 import com.bank.transaction_service.transaction.FeignClient.Dtos.UserAccountDto;
 import com.bank.transaction_service.transaction.Repositories.TransactionRepository;
+=======
+import com.bank.transaction_service.Event.TransactionEvent;
+import com.bank.transaction_service.Transaction.Dtos.TransactionDto;
+import com.bank.transaction_service.Transaction.Dtos.TransactionEditDto;
+import com.bank.transaction_service.Transaction.Dtos.TransactionInputDto;
+import com.bank.transaction_service.Transaction.Dtos.UpdateAccountBalanceDto;
+import com.bank.transaction_service.Transaction.Entity.Transaction;
+import com.bank.transaction_service.Transaction.Entity.TransactionStatus;
+import com.bank.transaction_service.Transaction.Entity.TransactionType;
+import com.bank.transaction_service.Transaction.FeignClient.AccountClient;
+import com.bank.transaction_service.Transaction.FeignClient.Dtos.UserAccountDto;
+import com.bank.transaction_service.Transaction.Repositories.TransactionRepository;
+>>>>>>> Stashed changes:transaction-service/src/main/java/com/bank/transaction_service/Transaction/Services/TransactionService.java
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +40,8 @@ import java.util.stream.Collectors;
 public class TransactionService {
     private final TransactionRepository transactionRepository;
     private  final AccountClient accountClient;
+    @Autowired
+    private KafkaTemplate<String, TransactionEvent> kafkaTemplate;
 
 
     @Transactional
@@ -91,8 +109,9 @@ public class TransactionService {
             updateAccountBalanceDto.setAccountId(transaction.getAccount());
 
             accountClient.updateAccountBalance(updateAccountBalanceDto);
-        }
 
+        }
+        //kafkaTemplate.send("transaction-topic", new TransactionEvent());
         Transaction updatedTransaction = transactionRepository.save(transaction);
         return mapToDTO(updatedTransaction);
     }

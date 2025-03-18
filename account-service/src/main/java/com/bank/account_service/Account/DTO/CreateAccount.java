@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class CreateAccount {
     private AccountType accountType;
     private AccountStatus accountStatus;
-    private Long customerId;
 }

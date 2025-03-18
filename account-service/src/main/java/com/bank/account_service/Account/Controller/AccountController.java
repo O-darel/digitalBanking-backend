@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/accounts")
+@RequestMapping("/api/accounts")
 public class AccountController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<AccountResponse>> getAllAccounts() {
         try {
             List<AccountResponse> accounts = accountService.getAllAccounts();

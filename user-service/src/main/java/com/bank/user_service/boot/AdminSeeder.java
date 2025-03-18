@@ -34,7 +34,7 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private void createSuperAdmin() {
-        String adminEmail = "super.admin@email.com";
+        String adminEmail = "karanja99erick@gmail.com";
 
         // Check if Super Admin already exists
         if (userRepository.findByEmail(adminEmail).isPresent()) {

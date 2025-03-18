@@ -1,0 +1,27 @@
+server:
+  port: 8085
+
+eureka:
+  eureka:
+    instance:
+      lease-renewal-interval-in-seconds: 10
+  client:
+  service-url:
+    defaultZone: http://localhost:8761/eureka/
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://yourUsername:yourPassword@localhost:27017/admin
+  application:
+    name: audit-service
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    consumer:
+      group-id: "account-group"
+      key-deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
+      value-deserializer: "com.bank.audit_logging_service.serializer.AccountEventDeserializer"
+      properties:
+        spring.json.type.mapping: "AuditAccountEvent:com.bank.account_service.AuditAccountEvent"
+      enable-auto-commit: true
+      auto-offset-reset: earliest

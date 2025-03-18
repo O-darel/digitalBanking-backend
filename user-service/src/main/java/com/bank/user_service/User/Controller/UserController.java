@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "http://172.16.10.55:4200")
 public class UserController {
 
     private final UserService userService;
@@ -30,7 +31,7 @@ public class UserController {
         this.userRepository=userRepository;
     }
 
-    //teacher sign up route
+
     @PostMapping("/register/admin")
     @PreAuthorize("hasAuthority('CREATE_ADMIN')")
     public ResponseEntity<SignUpResponseDto> adminSignupRoute(SignUpDto signUpDto){

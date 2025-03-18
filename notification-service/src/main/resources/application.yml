@@ -1,0 +1,32 @@
+server:
+  port: 8082
+
+eureka:
+  eureka:
+    instance:
+      lease-renewal-interval-in-seconds: 10
+  client:
+  service-url:
+    defaultZone: http://localhost:8761/eureka/
+
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: karanja99erick@gmail.com
+    password: xjzlzxazkgdsyhrh
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+  application:
+    name: notification-service
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    consumer:
+      group-id: "account-group"
+      key-deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
+      value-deserializer: "com.bank.notification_service.Serializer.AccountEventDeserializer"
+      properties:
+        spring.json.type.mapping: "AuditAccountEvent:com.bank.account_service.AccountEvent"
+      enable-auto-commit: true
+      auto-offset-reset: earliest

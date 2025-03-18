@@ -97,7 +97,7 @@ public class JwtService {
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
-                //.claim("role", role)
+                .claim("role", userDetails.)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(jwtPrivateKeyProvider.getPrivateKey(), SignatureAlgorithm.RS256)

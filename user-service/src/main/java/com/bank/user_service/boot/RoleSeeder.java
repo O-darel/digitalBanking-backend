@@ -30,7 +30,11 @@ public class RoleSeeder implements ApplicationListener<ContextRefreshedEvent> {
     public void loadRoles() {
         // Define roles and their associated permissions
         Map<String, Set<String>> rolesWithPermissions = Map.of(
+<<<<<<< Updated upstream
                 "SUPER_ADMIN", Set.of("MANAGE_ADMINS","CREATE_ADMIN", "VIEW_AUDIT_LOGS", "CONFIGURE_SYSTEM"),
+=======
+                "SUPER_ADMIN", Set.of("MANAGE_ADMINS", "VIEW_AUDIT_LOGS", "CREATE_ADMIN", "CONFIGURE_SYSTEM"),
+>>>>>>> Stashed changes
 
                 "ADMIN", Set.of("MANAGE_USERS", "CREATE_USERS", "DELETE_USERS", "ASSIGN_ROLES",
                         "VIEW_REPORTS", "APPROVE_LOANS", "MANAGE_TRANSACTIONS"),
